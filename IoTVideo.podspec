@@ -6,37 +6,39 @@
 # To learn more about a Podspec see https://guides.cocoapods.org/syntax/podspec.html
 #
 
-Pod::Spec.new do |s|
-  s.name             = 'IoTVideo'
-  s.version          = '0.1.0'
-  s.summary          = 'A short description of IoTVideo.'
+Pod::Spec.new do |spec|
+  spec.name          = 'IoTVideo'
+  spec.version       = '1.4.206f'
+  spec.summary       = "IoTVideo SDK for iOS"
+  spec.description   = "IoTVideo(Internet of Things Video) SDK for iOS"
+  spec.homepage      = "https://github.com/GWTimes/IoTVideoSDK-iOS"
+  spec.license       = { :type => "MIT", :file => "LICENSE" }
+  spec.author        = { "JonorZhang" => "zyx1507@163.com" }
 
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
+  spec.platform      = :ios, "9.0"
+  spec.requires_arc  = true
+  spec.source        = { :git => "https://github.com/GWTimes/IoTVideoSDK-iOS.git", :tag => "#{spec.version}" }
+  spec.libraries     = 'c++','z','bz2','iconv'
+  spec.frameworks    = 'AudioToolbox','VideoToolbox','CoreMedia'
+  spec.pod_target_xcconfig = { 'VALID_ARCHS' => 'x86_64 armv7 arm64' }
 
-  s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
+  spec.default_subspec = 'IoTVideoSDK'
 
-  s.homepage         = 'https://github.com/jonorzhang/IoTVideo'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
-  s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'jonorzhang' => 'zyx1507@163.com' }
-  s.source           = { :git => 'https://github.com/jonorzhang/IoTVideo.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  spec.subspec 'libp2p' do |ss|
+    ss.vendored_libraries = 'Frameworks/P2P/libiot_video_p2p.a'
+  end
 
-  s.ios.deployment_target = '9.0'
+  spec.subspec 'libFFmpeg3.4' do |ss| 
+    ss.vendored_libraries = 'Frameworks/FFmpeg/libFFmpeg3.4/*.a'
+  end
 
-  s.source_files = 'IoTVideo/Classes/**/*'
-  
-  # s.resource_bundles = {
-  #   'IoTVideo' => ['IoTVideo/Assets/*.png']
-  # }
+  spec.subspec 'libFFmpeg4.0' do |ss| 
+    ss.vendored_libraries = 'Frameworks/FFmpeg/libFFmpeg4.0/*.a'
+  end
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  spec.subspec 'IoTVideoSDK' do |ss| 
+    ss.dependency 'IoTVideo/libp2p'
+    ss.dependency 'IoTVideo/libFFmpeg3.4'
+    ss.vendored_frameworks = 'Frameworks/IoTVideo.framework'
+  end
 end
