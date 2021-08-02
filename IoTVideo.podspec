@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |spec|
   spec.name          = 'IoTVideo'
-  spec.version       = '1.4.206f'
+  spec.version       = '1.4.206f.beta'
   spec.summary       = "IoTVideo SDK for iOS"
   spec.description   = "IoTVideo(Internet of Things Video) SDK for iOS"
   spec.homepage      = "https://github.com/GWTimes/IoTVideoSDK-iOS"
@@ -22,23 +22,20 @@ Pod::Spec.new do |spec|
   spec.frameworks    = 'AudioToolbox','VideoToolbox','CoreMedia'
   spec.pod_target_xcconfig = { 'VALID_ARCHS' => 'x86_64 armv7 arm64' }
 
-  spec.default_subspec = 'IoTVideoSDK'
+  spec.default_subspecs = ['IoTVideo', 'IVVAS']
 
   spec.subspec 'libp2p' do |ss|
     ss.vendored_libraries = 'Frameworks/P2P/libiot_video_p2p.a'
   end
 
-  spec.subspec 'libFFmpeg3.4' do |ss| 
-    ss.vendored_libraries = 'Frameworks/FFmpeg/libFFmpeg3.4/*.a'
-  end
-
-  spec.subspec 'libFFmpeg4.0' do |ss| 
-    ss.vendored_libraries = 'Frameworks/FFmpeg/libFFmpeg4.0/*.a'
-  end
-
-  spec.subspec 'IoTVideoSDK' do |ss| 
+  spec.subspec 'IoTVideo' do |ss| 
     ss.dependency 'IoTVideo/libp2p'
-    ss.dependency 'IoTVideo/libFFmpeg3.4'
+    ss.dependency 'libFFmpeg-SSL-iOS', '~> 3.4'
     ss.vendored_frameworks = 'Frameworks/IoTVideo.framework'
+  end
+
+  spec.subspec 'IVVAS' do |ss| 
+    ss.dependency 'IoTVideo/IoTVideo'
+    ss.vendored_frameworks = 'Frameworks/IVVAS.framework'
   end
 end
